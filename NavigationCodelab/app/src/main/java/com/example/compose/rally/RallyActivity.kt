@@ -19,7 +19,6 @@ package com.example.compose.rally
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -27,16 +26,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navDeepLink
-import com.example.compose.rally.ui.accounts.AccountsScreen
-import com.example.compose.rally.ui.accounts.SingleAccountScreen
-import com.example.compose.rally.ui.bills.BillsScreen
 import com.example.compose.rally.ui.components.RallyTabRow
-import com.example.compose.rally.ui.overview.OverviewScreen
 import com.example.compose.rally.ui.theme.RallyTheme
 
 /**
@@ -76,59 +68,14 @@ fun RallyApp() {
                 )
             }
         ) { innerPadding ->
-            NavHost(
+             RallyNavHost(
                 navController = navController,
-                startDestination = Overview.route,
                 modifier = Modifier.padding(innerPadding)
-            ) {
-                // builder parameter will be defined here as the graph
-                composable(route = Overview.route) {
-                    //Overview.screen()
-                    OverviewScreen(
-                            onClickSeeAllAccounts = {
-                                            navController.navigateSingleTopTo(Accounts.route)
-                            },
-                            onClickSeeAllBills = {
-                                navController.navigateSingleTopTo(Bills.route)
-                            },
-                    onAccountClick = { accountType ->
-                                navController.navigateSingleTopTo("${SingleAccount.route}/$accountType")
-                    }
-                    )
-                }
-                composable(route = Accounts.route) {
-                    //Accounts.screen()
-                    AccountsScreen(
-                            onAccountClick = { accountType ->
-                                navController.navigateSingleTopTo("${SingleAccount.route}/$accountType") }
-                    )
-                }
-                composable(route = Bills.route) {
-                    //Bills.screen()
-                    BillsScreen()
-                }
-                composable(
-                      /* route = "${SingleAccount.route}/{${SingleAccount.accountTypeArg}}",
-                       arguments =  SingleAccount.arguments*/
-                route = SingleAccount.routeWithArgs,
-                arguments = SingleAccount.arguments,
-                deepLinks = SingleAccount.deepLinks
-                /*deepLinks = listOf(navDeepLink {
-                    uriPattern = "rally://${SingleAccount.route}/{${SingleAccount.accountTypeArg}}"
-                    })*/
-
-                ) {navBackStackEntry ->
-                    // Retrieve the passed argument
-                    val accountType =
-                        navBackStackEntry.arguments?.getString(SingleAccount.accountTypeArg)
-
-                    // Pass accountType to SingleAccountScreen
-                    SingleAccountScreen(accountType)
-                }
-            }
+            )
         }
     }
 }
+/*
 fun NavHostController.navigateSingleTopTo(route: String) =
     this.navigate(route) {
         popUpTo(
@@ -139,3 +86,4 @@ fun NavHostController.navigateSingleTopTo(route: String) =
         launchSingleTop = true
         restoreState = true
     }
+*/
